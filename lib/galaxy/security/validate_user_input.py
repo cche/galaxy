@@ -79,8 +79,13 @@ def transform_publicname(trans, publicname, user=None):
 
 
 def validate_password(trans, password, confirm):
+    symbols = set(['+', ',', '.', '-', '?', ':', '_', '(', ')', '*', '/', ';', '+', '!'])
     if len(password) < PASSWORD_MIN_LEN:
         return "Use a password of at least %d characters." % PASSWORD_MIN_LEN
     elif password != confirm:
         return "Passwords do not match."
+    elif not any(c.isupper() for c in password) or\
+            not any(c.isdigit() for c in password) or\
+            not any(c in symbols for c in password):
+        return "Use at least one upper case letter, one symbol and one number"
     return ""
